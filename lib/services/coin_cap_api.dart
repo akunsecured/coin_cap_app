@@ -11,9 +11,9 @@ class CoinCapApi {
     dio = Dio(options);
   }
 
-  Future<Response?> getCoins(int limit) async {
-    final response =
-        await dio.get('/assets', queryParameters: {'limit': limit});
+  Future<Response?> getCoins() async {
+    final response = await dio
+        .get('/assets', queryParameters: {'limit': Constants.maxLimit});
     if (response.statusCode == 200) {
       return response;
     }

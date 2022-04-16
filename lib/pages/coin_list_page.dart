@@ -37,34 +37,46 @@ class _CoinListPageState extends State<CoinListPage> {
                 return const LoadingWidget();
               }
 
-              List<Widget> children = [
-                SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  physics: const BouncingScrollPhysics(),
-                  child: buildDataTable(provider.coinsList,
-                      provider.sortColumnIndex, provider.sortAscending),
-                )
-              ];
-
-              if (!provider.isMaxLoaded()) {
-                children.add(Container(
-                    margin: const EdgeInsets.symmetric(
-                        vertical: Constants.buttonVerticalMargin),
-                    height: !provider.isLoading ? Constants.buttonHeight : null,
-                    width: !provider.isLoading ? Constants.buttonWidth : null,
-                    child: provider.isLoading
-                        ? const CircularProgressIndicator()
-                        : RoundedButton(
-                            text: 'Show more',
-                            onTap: () => provider.getCoinList(),
-                          )));
-              }
-
-              return SingleChildScrollView(
-                  physics: const BouncingScrollPhysics(),
-                  child: Column(
-                    children: children,
-                  ));
+              return LayoutBuilder(
+                builder: (context, constraints) => SingleChildScrollView(
+                    physics: const BouncingScrollPhysics(),
+                    child: Column(
+                      children: [
+                        Container(
+                          alignment: Alignment.topLeft,
+                          child: SingleChildScrollView(
+                            scrollDirection: Axis.horizontal,
+                            physics: const BouncingScrollPhysics(),
+                            child: ConstrainedBox(
+                              constraints: BoxConstraints(
+                                  minWidth: constraints.maxWidth),
+                              child: buildDataTable(
+                                  provider.coinsList,
+                                  provider.sortColumnIndex,
+                                  provider.sortAscending),
+                            ),
+                          ),
+                        ),
+                        !provider.isMaxLoaded()
+                            ? Container(
+                                margin: const EdgeInsets.symmetric(
+                                    vertical: Constants.buttonVerticalMargin),
+                                height: !provider.isLoading
+                                    ? Constants.buttonHeight
+                                    : null,
+                                width: !provider.isLoading
+                                    ? Constants.buttonWidth
+                                    : null,
+                                child: provider.isLoading
+                                    ? const CircularProgressIndicator()
+                                    : RoundedButton(
+                                        text: 'Show more',
+                                        onTap: () => provider.loadMore(),
+                                      ))
+                            : const SizedBox()
+                      ],
+                    )),
+              );
             },
           ),
         ));
@@ -75,6 +87,7 @@ class _CoinListPageState extends State<CoinListPage> {
     final columns = ['Rank', 'Name', 'Price', 'Change (24Hr)'];
 
     return DataTable(
+        showCheckboxColumn: false,
         sortColumnIndex: sortColumnIndex,
         sortAscending: sortAscending,
         columns: getColumns(columns),
@@ -92,20 +105,26 @@ class _CoinListPageState extends State<CoinListPage> {
       .toList();
 
   List<DataRow> getRows(List<CoinModel> coins) => coins
-      .map((coin) => DataRow(cells: [
-            DataCell(Text(coin.rank.toString())),
-            getNameAndSymbol(coin),
-            DataCell(Text(
-              '\$${coin.priceUsd.roundToDigits(2)}',
-            )),
-            DataCell(Text(
-              '${coin.changePercent24Hr.roundToDigits(2)}%',
-              style: TextStyle(
-                  color: coin.changePercent24Hr.isNegative
-                      ? Colors.red
-                      : Colors.green),
-            ))
-          ]))
+      .map((coin) => DataRow(
+              onSelectChanged: (bool? selected) {
+                if (selected != null && selected) {
+                  print(coin.id);
+                }
+              },
+              cells: [
+                DataCell(Text(coin.rank.toString())),
+                getNameAndSymbol(coin),
+                DataCell(Text(
+                  '\$${coin.priceUsd.roundToDigits(2)}',
+                )),
+                DataCell(Text(
+                  '${coin.changePercent24Hr.roundToDigits(2)}%',
+                  style: TextStyle(
+                      color: coin.changePercent24Hr.isNegative
+                          ? Colors.red
+                          : Colors.green),
+                ))
+              ]))
       .toList();
 
   DataCell getNameAndSymbol(CoinModel coin) =>
