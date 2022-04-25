@@ -38,6 +38,7 @@ dependencies:
   provider: ^6.0.2
   web_socket_channel: ^2.1.0
   dio: ^4.0.6
+  syncfusion_flutter_charts: ^20.1.48
 
 dev_dependencies:
   flutter_test:

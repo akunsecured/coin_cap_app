@@ -1,4 +1,5 @@
 import 'package:coin_cap_app/models/coin_model.dart';
+import 'package:coin_cap_app/pages/coin_page.dart';
 import 'package:coin_cap_app/providers/coin_map_provider.dart';
 import 'package:coin_cap_app/utils/constants.dart';
 import 'package:coin_cap_app/utils/number_rounding.dart';
@@ -39,14 +40,12 @@ class _CoinListPageState extends State<CoinListPage> {
 
               return LayoutBuilder(
                 builder: (context, constraints) => SingleChildScrollView(
-                    physics: const BouncingScrollPhysics(),
                     child: Column(
                       children: [
                         Container(
                           alignment: Alignment.topLeft,
                           child: SingleChildScrollView(
                             scrollDirection: Axis.horizontal,
-                            physics: const BouncingScrollPhysics(),
                             child: ConstrainedBox(
                               constraints: BoxConstraints(
                                   minWidth: constraints.maxWidth),
@@ -91,11 +90,13 @@ class _CoinListPageState extends State<CoinListPage> {
         sortColumnIndex: sortColumnIndex,
         sortAscending: sortAscending,
         columns: getColumns(columns),
-        rows: getRows(coins));
+        rows: getRows(coins),
+        columnSpacing: 24,
+    );
   }
 
   void onSort(int columnIndex, bool ascending) {
-    _provider.changeSort(columnIndex, ascending);
+    _provider.changeSort(columnIndex: columnIndex, ascending: ascending);
   }
 
   List<DataColumn> getColumns(List<String> columns) => columns
@@ -108,7 +109,7 @@ class _CoinListPageState extends State<CoinListPage> {
       .map((coin) => DataRow(
               onSelectChanged: (bool? selected) {
                 if (selected != null && selected) {
-                  print(coin.id);
+                  navigateToCoinPage(CoinNameSymbol.fromCoinModel(coin));
                 }
               },
               cells: [
@@ -129,4 +130,11 @@ class _CoinListPageState extends State<CoinListPage> {
 
   DataCell getNameAndSymbol(CoinModel coin) =>
       DataCell(Text('${coin.name} (${coin.symbol})'));
+
+  void navigateToCoinPage(CoinNameSymbol coinNameSymbol) {
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => CoinPage(coinNameSymbol: coinNameSymbol)));
+  }
 }

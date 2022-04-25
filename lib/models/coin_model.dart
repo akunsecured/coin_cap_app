@@ -49,3 +49,20 @@ class CoinModel {
     }""";
   }
 }
+
+class CoinNameSymbol {
+  final String name;
+  final String symbol;
+
+  CoinNameSymbol({required this.name, required this.symbol});
+
+  factory CoinNameSymbol.fromCoinModel(CoinModel coin) =>
+      CoinNameSymbol(name: coin.name, symbol: coin.symbol);
+}
+
+class CoinGraphModel {
+  final int timeStamp;
+  final double price;
+
+  CoinGraphModel({required this.timeStamp, required this.price});
+}
