@@ -1,50 +1,59 @@
-import 'dart:math';
-
-import 'package:coin_cap_app/models/coin_model.dart';
-import 'package:coin_cap_app/models/interval_enum.dart';
+import 'package:coin_cap_app/models/currency.dart';
+import 'package:coin_cap_app/providers/currency_provider.dart';
+import 'package:coin_cap_app/widgets/currency_page_body.dart';
 import 'package:flutter/material.dart';
-import 'package:syncfusion_flutter_charts/charts.dart';
+import 'package:provider/provider.dart';
 
-class CoinPage extends StatefulWidget {
-  final CoinNameSymbol coinNameSymbol;
+class CurrencyPage extends StatefulWidget {
+  final Currency currency;
 
-  const CoinPage({Key? key, required this.coinNameSymbol}) : super(key: key);
+  const CurrencyPage(this.currency, {Key? key}) : super(key: key);
 
   @override
-  State<CoinPage> createState() => _CoinPageState();
+  State<CurrencyPage> createState() => _CurrencyPageState();
 }
 
-class _CoinPageState extends State<CoinPage> {
-  late List<_ChartData> _chartData;
+class _CurrencyPageState extends State<CurrencyPage> {
+  /*late List<_ChartData> _chartData;
 
   @override
   void initState() {
     print(IntervalEnum.d1.getName());
     _getChartData();
     super.initState();
-  }
+  }*/
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('${widget.coinNameSymbol.name} (${widget.coinNameSymbol.symbol})'),
-        centerTitle: true,
-      ),
+        appBar: AppBar(
+          title: Text('${widget.currency.name} (${widget.currency.symbol})'),
+          centerTitle: true,
+        ),
+        body: ChangeNotifierProvider(
+          create: (_) => CurrencyProvider(widget.currency.id!),
+          child: Consumer<CurrencyProvider>(
+            builder: (BuildContext context, CurrencyProvider provider,
+                    Widget? child) =>
+                const CurrencyPageBody(),
+          ),
+        )
+        /*
       body: Column(
         mainAxisSize: MainAxisSize.max,
-        children: [
-          _buildAnimationAreaChart()
-        ],
+        children: [_buildAnimationAreaChart()],
       ),
-    );
+       */
+        );
   }
+}
 
+/*
   SfCartesianChart _buildAnimationAreaChart() {
     return SfCartesianChart(
         plotAreaBorderWidth: 0,
-        primaryXAxis: NumericAxis(
-            majorGridLines: const MajorGridLines(width: 0)),
+        primaryXAxis:
+            NumericAxis(majorGridLines: const MajorGridLines(width: 0)),
         primaryYAxis: NumericAxis(
             majorTickLines: const MajorTickLines(color: Colors.transparent),
             axisLine: const AxisLine(width: 0)),
@@ -81,6 +90,8 @@ class _CoinPageState extends State<CoinPage> {
 
 class _ChartData {
   _ChartData(this.x, this.y);
+
   final int x;
   final int y;
 }
+*/

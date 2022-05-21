@@ -5,9 +5,6 @@ class Constants {
   static const double buttonRadius = 24.0;
 
   static const String apiBaseUrl = "https://api.coincap.io/v2";
-  static const String imageApiBaseUrl =
-      "https://assets.coincap.io/assets/icons";
-  static const int maxLimit = 2000;
-
+  static const int limitQuery = 2000;
   static const int loadingLimit = 40;
 }

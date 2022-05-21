@@ -1,4 +1,4 @@
-import 'package:coin_cap_app/pages/coin_list_page.dart';
+import 'package:coin_cap_app/views/currency_list_page.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -11,10 +11,10 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'CoinCapeApp',
+      title: 'CoinCap App',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(primarySwatch: Colors.teal, brightness: Brightness.dark),
-      home: const CoinListPage(),
+      home: const CurrencyListPage(),
     );
   }
 }
