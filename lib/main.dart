@@ -1,7 +1,13 @@
 import 'package:coin_cap_app/views/currency_list_page.dart';
 import 'package:flutter/material.dart';
+import 'package:responsive_grid/responsive_grid.dart';
 
 void main() {
+  ResponsiveGridBreakpoints.value = ResponsiveGridBreakpoints(
+    xs: 800,
+    sm: 1000,
+    md: 1320,
+  );
   runApp(const MyApp());
 }
 

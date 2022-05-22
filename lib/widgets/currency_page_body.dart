@@ -7,6 +7,7 @@ import 'package:coin_cap_app/widgets/rank_widget.dart';
 import 'package:coin_cap_app/widgets/rounded_button.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:responsive_grid/responsive_grid.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import 'title_text.dart';
@@ -33,25 +34,12 @@ class _CurrencyPageBodyState extends State<CurrencyPageBody> {
       return const LoadingWidget();
     }
 
-    int rank = _provider.currency!.rank;
-
-
     return LayoutBuilder(
       builder: (context, constraints) => SingleChildScrollView(
         child: Container(
           padding: const EdgeInsets.all(32.0),
           child: Column(
-            children: [
-              Row(
-                children: [
-                  RankWidget(rank),
-                  buildPriceAndPercent(),
-                ],
-              ),
-              buildGrid(),
-              buildButton(),
-              const CurrencyChart()
-            ],
+            children: [buildGrid(), buildButton(), const CurrencyChart()],
           ),
         ),
       ),
@@ -75,16 +63,10 @@ class _CurrencyPageBodyState extends State<CurrencyPageBody> {
             Text('${changePercent24Hr.roundToDigits(2)}%',
                 style: TextStyle(
                     fontSize: 18,
-                    color: changePercentPositive
-                        ? Colors.green
-                        : Colors.red)),
+                    color: changePercentPositive ? Colors.green : Colors.red)),
             Icon(
-              changePercentPositive
-                  ? Icons.arrow_upward
-                  : Icons.arrow_downward,
-              color: changePercentPositive
-                  ? Colors.green
-                  : Colors.red,
+              changePercentPositive ? Icons.arrow_upward : Icons.arrow_downward,
+              color: changePercentPositive ? Colors.green : Colors.red,
             )
           ],
         )
@@ -104,24 +86,48 @@ class _CurrencyPageBodyState extends State<CurrencyPageBody> {
       );
 
   Widget buildGrid() {
-    var size = MediaQuery.of(context).size;
-
     double marketCap = _provider.currency!.marketCapUsd;
     double volume24Hr = _provider.currency!.volumeUsd24Hr;
     double supply = _provider.currency!.supply;
+    int rank = _provider.currency!.rank;
 
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 16.0),
-      child: GridView.count(
-        physics: const NeverScrollableScrollPhysics(),
-        childAspectRatio: (size.width / 2) / (size.width / 2 / 3),
-        shrinkWrap: true,
-        crossAxisCount: 2,
+      child: ResponsiveGridRow(
         children: [
-          buildGridCell('Market Cap', '\$${marketCap.toFormatted()}'),
-          buildGridCell('Volume (24Hr)', '\$${volume24Hr.toFormatted()}'),
-          buildGridCell('Supply',
-              '${supply.toFormatted()} ${_provider.currency?.symbol}'),
+          ResponsiveGridCol(
+              xs: 12,
+              sm: 6,
+              md: 6,
+              lg: 3,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  RankWidget(rank),
+                  buildPriceAndPercent(),
+                ],
+              )),
+          ResponsiveGridCol(
+              xs: 6,
+              sm: 6,
+              md: 3,
+              lg: 3,
+              child:
+                  buildGridCell('Market Cap', '\$${marketCap.toFormatted()}')),
+          ResponsiveGridCol(
+              xs: 6,
+              sm: 6,
+              md: 3,
+              lg: 3,
+              child: buildGridCell(
+                  'Volume (24Hr)', '\$${volume24Hr.toFormatted()}')),
+          ResponsiveGridCol(
+              xs: 12,
+              sm: 6,
+              md: 12,
+              lg: 3,
+              child: buildGridCell('Supply',
+                  '${supply.toFormatted()} ${_provider.currency?.symbol}'))
         ],
       ),
     );

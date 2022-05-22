@@ -6,7 +6,7 @@ extension MyNumExtension on num {
 
 extension MyDoubleExtension on double {
   double roundToDigits(int digits) {
-    return double.parse(toStringAsFixed(digits));
+    return double.parse(toStringAsFixed(this > 10 ? digits : 6));
   }
 
   String toFormatted() {
