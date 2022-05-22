@@ -1,6 +1,6 @@
 import 'package:coin_cap_app/providers/currency_provider.dart';
 import 'package:coin_cap_app/utils/extensions.dart';
-import 'package:coin_cap_app/widgets/currency_graph.dart';
+import 'package:coin_cap_app/widgets/currency_chart.dart';
 import 'package:coin_cap_app/widgets/error_text.dart';
 import 'package:coin_cap_app/widgets/loading_widget.dart';
 import 'package:coin_cap_app/widgets/rounded_button.dart';
@@ -92,7 +92,7 @@ class _CurrencyPageBodyState extends State<CurrencyPageBody> {
               ),
               buildGrid(),
               buildButton(),
-              const CurrencyGraph()
+              const CurrencyChart()
             ],
           ),
         ),
