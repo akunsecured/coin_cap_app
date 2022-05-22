@@ -3,6 +3,7 @@ import 'package:coin_cap_app/utils/extensions.dart';
 import 'package:coin_cap_app/widgets/currency_chart.dart';
 import 'package:coin_cap_app/widgets/error_text.dart';
 import 'package:coin_cap_app/widgets/loading_widget.dart';
+import 'package:coin_cap_app/widgets/rank_widget.dart';
 import 'package:coin_cap_app/widgets/rounded_button.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -33,9 +34,7 @@ class _CurrencyPageBodyState extends State<CurrencyPageBody> {
     }
 
     int rank = _provider.currency!.rank;
-    double priceUsd = _provider.currency!.priceUsd;
-    double changePercent24Hr = _provider.currency!.changePercent24Hr;
-    bool changePercentPositive = changePercent24Hr > 0.0;
+
 
     return LayoutBuilder(
       builder: (context, constraints) => SingleChildScrollView(
@@ -45,49 +44,8 @@ class _CurrencyPageBodyState extends State<CurrencyPageBody> {
             children: [
               Row(
                 children: [
-                  CircleAvatar(
-                    radius: 64,
-                    backgroundColor: Colors.teal,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text('$rank',
-                            style: const TextStyle(
-                                fontSize: 24, color: Colors.white)),
-                        const Text('Rank',
-                            style: TextStyle(color: Colors.white))
-                      ],
-                    ),
-                  ),
-                  Expanded(
-                    child: Column(
-                      children: [
-                        Text(
-                          '\$${priceUsd.roundToDigits(2)}',
-                          style: const TextStyle(fontSize: 32),
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text('${changePercent24Hr.roundToDigits(2)}%',
-                                style: TextStyle(
-                                    fontSize: 18,
-                                    color: changePercentPositive
-                                        ? Colors.green
-                                        : Colors.red)),
-                            Icon(
-                              changePercentPositive
-                                  ? Icons.arrow_upward
-                                  : Icons.arrow_downward,
-                              color: changePercentPositive
-                                  ? Colors.green
-                                  : Colors.red,
-                            )
-                          ],
-                        )
-                      ],
-                    ),
-                  )
+                  RankWidget(rank),
+                  buildPriceAndPercent(),
                 ],
               ),
               buildGrid(),
@@ -97,6 +55,40 @@ class _CurrencyPageBodyState extends State<CurrencyPageBody> {
           ),
         ),
       ),
+    );
+  }
+
+  Widget buildPriceAndPercent() {
+    double priceUsd = _provider.currency!.priceUsd;
+    double changePercent24Hr = _provider.currency!.changePercent24Hr;
+    bool changePercentPositive = changePercent24Hr > 0.0;
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          '\$${priceUsd.roundToDigits(2)}',
+          style: const TextStyle(fontSize: 32),
+        ),
+        Row(
+          children: [
+            Text('${changePercent24Hr.roundToDigits(2)}%',
+                style: TextStyle(
+                    fontSize: 18,
+                    color: changePercentPositive
+                        ? Colors.green
+                        : Colors.red)),
+            Icon(
+              changePercentPositive
+                  ? Icons.arrow_upward
+                  : Icons.arrow_downward,
+              color: changePercentPositive
+                  ? Colors.green
+                  : Colors.red,
+            )
+          ],
+        )
+      ],
     );
   }
 

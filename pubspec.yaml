@@ -35,10 +35,9 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.4
   http: ^0.13.4
-  provider: ^6.0.2
-  web_socket_channel: ^2.1.0
+  provider: ^6.0.3
   dio: ^4.0.6
-  syncfusion_flutter_charts: ^20.1.48
+  syncfusion_flutter_charts: ^20.1.56
   url_launcher: ^6.1.2
 
 dev_dependencies:
