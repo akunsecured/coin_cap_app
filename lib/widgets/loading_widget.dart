@@ -6,6 +6,9 @@ class LoadingWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) => const Align(
         alignment: Alignment.center,
-        child: CircularProgressIndicator(),
+        child: Padding(
+          padding: EdgeInsets.all(12.0),
+          child: CircularProgressIndicator(),
+        ),
       );
 }

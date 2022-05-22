@@ -57,11 +57,11 @@ class _CurrencyDataTableState extends State<CurrencyDataTable> {
               ]))
       .toList();
 
-  DataCell getNameAndSymbol(Currency currency) => DataCell(Hero(
-      tag: currency.id!, child: Text('${currency.name} (${currency.symbol})')));
+  DataCell getNameAndSymbol(Currency currency) =>
+      DataCell(Text('${currency.name} (${currency.symbol})'));
 
   void navigateToCoinPage(BuildContext context, Currency currency) {
-    Navigator.push(
-        context, MaterialPageRoute(builder: (context) => CurrencyPage(currency)));
+    Navigator.push(context,
+        MaterialPageRoute(builder: (context) => CurrencyPage(currency)));
   }
 }

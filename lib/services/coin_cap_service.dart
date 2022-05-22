@@ -1,5 +1,6 @@
 import 'package:coin_cap_app/models/currency.dart';
 import 'package:coin_cap_app/models/currency_history.dart';
+import 'package:coin_cap_app/models/date_interval.dart';
 import 'package:coin_cap_app/utils/constants.dart';
 import 'package:coin_cap_app/utils/errors.dart';
 import 'package:dio/dio.dart';
@@ -39,22 +40,43 @@ class CoinCapService {
     return currencies;
   }
 
-  Future<Map<String, dynamic>> getCurrencyWithHistory(String id) async {
+  Future<List<CurrencyHistory>> getCurrencyHistory(
+      String id, DateInterval dateInterval) async {
+    List<CurrencyHistory> histories = [];
+
+    try {
+      final response = await _dio.get('/assets/$id/history', queryParameters: {
+        'interval': dateInterval.interval,
+        'start': dateInterval.start,
+        'end': dateInterval.end
+      });
+      _checkStatusCode(response);
+
+      for (Map<String, dynamic> currencyHistory in response.data['data']) {
+        histories.add(CurrencyHistory.fromJson(currencyHistory));
+      }
+    } on DioError catch (e) {
+      throw AppError(e.error.message);
+    } on Exception catch (e) {
+      throw AppError(e.toString());
+    }
+
+    return histories;
+  }
+
+  Future<Map<String, dynamic>> getCurrencyWithHistory(
+      String id, DateInterval dateInterval) async {
     Map<String, dynamic> result = {};
 
     try {
       final currencyResponse = await _dio.get('/assets/$id');
       _checkStatusCode(currencyResponse);
 
-      final currencyHistoryResponse = await _dio.get('/assets/$id/history');
-      _checkStatusCode(currencyHistoryResponse);
-
+      final currencyHistories = await getCurrencyHistory(id, dateInterval);
       var currency = Currency.fromJson(currencyResponse.data['data']);
-      var currencyHistory =
-          CurrencyHistory.fromJson(currencyHistoryResponse.data['data']);
 
       result['currency'] = currency;
-      result['currencyHistory'] = currencyHistory;
+      result['currencyHistories'] = currencyHistories;
     } on DioError catch (e) {
       throw AppError(e.error.toString());
     } on Exception catch (e) {

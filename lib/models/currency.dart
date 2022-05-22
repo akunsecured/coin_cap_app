@@ -1,5 +1,5 @@
 class Currency {
-  final String? id, symbol, name;
+  final String? id, symbol, name, explorer;
   final int rank;
   final double supply,
       maxSupply,
@@ -20,7 +20,8 @@ class Currency {
       this.volumeUsd24Hr,
       this.priceUsd,
       this.changePercent24Hr,
-      this.vwap24Hr);
+      this.vwap24Hr,
+      this.explorer);
 
   factory Currency.fromJson(Map<String, dynamic> json) => Currency(
       json['id'],
@@ -35,5 +36,6 @@ class Currency {
       json['changePercent24Hr'] == null
           ? 0.0
           : double.parse(json['changePercent24Hr']),
-      json['vwap24Hr'] == null ? 0.0 : double.parse(json['vwap24Hr']));
+      json['vwap24Hr'] == null ? 0.0 : double.parse(json['vwap24Hr']),
+      json['explorer']);
 }

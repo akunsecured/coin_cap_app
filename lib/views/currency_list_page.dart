@@ -11,22 +11,22 @@ class CurrencyListPage extends StatelessWidget {
     return ChangeNotifierProvider(
         create: (_) => CurrencyListProvider(),
         child: Consumer<CurrencyListProvider>(
-          builder:
-              (BuildContext context, CurrencyListProvider provider, Widget? child) =>
-                  Scaffold(
-                      appBar: AppBar(
-                        title: const Text('Currency list'),
-                        centerTitle: true,
-                        actions: [
-                          IconButton(
-                              tooltip: 'Refresh',
-                              onPressed: () {
-                                provider.getCurrenciesList();
-                              },
-                              icon: const Icon(Icons.refresh))
-                        ],
-                      ),
-                      body: const CurrencyListPageBody()),
+          builder: (BuildContext context, CurrencyListProvider provider,
+                  Widget? child) =>
+              Scaffold(
+                  appBar: AppBar(
+                    title: const Text('Currency list'),
+                    centerTitle: true,
+                    actions: [
+                      IconButton(
+                          tooltip: 'Refresh',
+                          onPressed: () {
+                            provider.getCurrenciesList();
+                          },
+                          icon: const Icon(Icons.refresh))
+                    ],
+                  ),
+                  body: const CurrencyListPageBody()),
         ));
   }
 }

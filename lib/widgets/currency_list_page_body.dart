@@ -16,7 +16,7 @@ class CurrencyListPageBody extends StatelessWidget {
     var provider = context.watch<CurrencyListProvider>();
 
     if (provider.error != null) {
-      return ErrorText(provider.error!);
+      return ErrorText(provider.error);
     }
 
     if (provider.isLoading) {

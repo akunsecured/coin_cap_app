@@ -38,6 +38,7 @@ class CurrencyListProvider extends ChangeNotifier {
   Future<void> getCurrenciesList() async {
     if (isLoading) return;
 
+    _sortColumnIndex = null;
     error = null;
     _currenciesList.clear();
     loaded = Constants.loadingLimit;
@@ -67,12 +68,10 @@ class CurrencyListProvider extends ChangeNotifier {
 
     switch (_sortColumnIndex) {
       case 1:
-        _currenciesList
-            .sort((c1, c2) => _compareString(c1.name!, c2.name!));
+        _currenciesList.sort((c1, c2) => _compareString(c1.name!, c2.name!));
         break;
       case 2:
-        _currenciesList.sort(
-            (c1, c2) => _compareNum(c1.priceUsd, c2.priceUsd));
+        _currenciesList.sort((c1, c2) => _compareNum(c1.priceUsd, c2.priceUsd));
         break;
       default:
         _currenciesList.sort((c1, c2) => _compareNum(c1.rank, c2.rank));
